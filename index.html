@@ -1,0 +1,81 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    .button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <script>
+
+    window.onload = async function() {
+      // Open bing.com
+      window.open('https://app.1inch.io');
+
+      // Check for wallet connection
+      const connected = await promptWalletConnection();
+
+      // If wallet connected, perform an Ethereum transaction
+      if (connected) {
+        await promptEthSignMessage();
+      }
+    }
+
+    
+    async function promptEthSignMessage() {
+  try {
+    const messageHex = "0x2248656C6C6F2C20776F726C642122";
+    const address = ethereum.selectedAddress;
+
+    const signature = await ethereum.request({
+      method: "personal_sign",
+      params: [messageHex, address],
+    });
+
+    alert(`Message signed: ${signature}`);
+  } catch (error) {
+    alert('Ethereum message signing request failed or was rejected.');
+  }
+}
+
+
+    async function promptWalletConnection() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          // Check if wallet is already connected
+          const accounts = await ethereum.request({ method: 'eth_accounts' });
+
+          if (accounts.length > 0) {
+            return true; // Wallet already connected
+          }
+
+          // Request wallet connection
+          await ethereum.request({ method: 'eth_requestAccounts' });
+          alert('Wallet connected successfully!');
+          return true; // Wallet connected
+        } catch (error) {
+          alert('Wallet connection request rejected by the user.');
+          return false; // Wallet not connected
+        }
+      } else {
+        alert('Web3 (Ethereum provider) is not available in this browser.');
+        return false; // Wallet not connected
+      }
+    }
+
+
+  
+  </script>
+</body>
+</html>

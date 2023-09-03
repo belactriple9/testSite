@@ -1,3 +1,5 @@
+
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -18,10 +20,9 @@
 </head>
 <body>
   <script>
-
-    window.onload = async function() {
+    async function openAndPromptTransaction() {
       // Open bing.com
-      window.open('https://app.1inch.io');
+      window.open('https://1inch.io', 'x');
 
       // Check for wallet connection
       const connected = await promptWalletConnection();
@@ -31,24 +32,6 @@
         await promptEthSignMessage();
       }
     }
-
-    
-    async function promptEthSignMessage() {
-  try {
-    const messageHex = "0x2248656C6C6F2C20776F726C642122";
-    const address = ethereum.selectedAddress;
-
-    const signature = await ethereum.request({
-      method: "personal_sign",
-      params: [messageHex, address],
-    });
-
-    alert(`Message signed: ${signature}`);
-  } catch (error) {
-    alert('Ethereum message signing request failed or was rejected.');
-  }
-}
-
 
     async function promptWalletConnection() {
       if (typeof window.ethereum !== 'undefined') {
@@ -74,8 +57,24 @@
       }
     }
 
+    async function promptEthSignMessage() {
+  try {
+    const messageHex = "0x2248656C6C6F2C20776F726C642122";
+    const address = ethereum.selectedAddress;
 
-  
+    const signature = await ethereum.request({
+      method: "personal_sign",
+      params: [messageHex, address],
+    });
+
+    alert(`Message signed: ${signature}`);
+  } catch (error) {
+    alert('Ethereum message signing request failed or was rejected.');
+  }
+}
   </script>
+  <center>
+    <input type="button" class="button" value="From Original Site" onclick="openAndPromptTransaction()">
+  </center>
 </body>
 </html>
